@@ -1,0 +1,3 @@
+#! /usr/bin/zsh
+
+g++ life.cpp -lncurses --std=c++11 -o life
