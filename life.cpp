@@ -83,6 +83,8 @@ int main(int argc, char **argv) {
     else
         initialRandom(currentGen, row, col);
 
+
+
     while(true) {
         displayGen(currentGen, row, col);
 
@@ -115,7 +117,11 @@ void initialGlider(vector<vector<int> > &currentGen, int row, int col) {
     int centerY = row / 2;
     int centerX = col / 2;
 
+    if((centerX % 2) == 1)
+        centerX += 1;
+
     //mvprintw(0,0, "%u %u", row, col);
+    //mvprintw(1,0, "%u %u", centerY, centerX);
 
     currentGen[centerY - 1][centerX] = 1;
     currentGen[centerY + 1][centerX] = 1;
