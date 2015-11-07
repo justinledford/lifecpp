@@ -1,0 +1,9 @@
+arguments:
+    colors
+
+glider gun
+pulsar
+
+better handling of arguments/defaults
+
+cells wrap around
