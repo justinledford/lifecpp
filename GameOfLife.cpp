@@ -17,6 +17,8 @@ GameOfLife::GameOfLife(int s, string m)
 
     currentGen.initializeCoordinates(row, col);
     nextGen.initializeCoordinates(row, col);
+
+    genNumber = 0;
 }
 
 void GameOfLife::start() {
@@ -47,6 +49,11 @@ void GameOfLife::initializeGui() {
     curs_set(0);
     start_color();
     init_pair(1, COLOR_BLACK, COLOR_GREEN);
+    init_pair(2, COLOR_BLACK, COLOR_BLUE);
+    init_pair(3, COLOR_BLACK, COLOR_RED);
+    init_pair(4, COLOR_BLACK, COLOR_CYAN);
+    init_pair(5, COLOR_BLACK, COLOR_YELLOW);
+    init_pair(6, COLOR_BLACK, COLOR_MAGENTA);
     //timeout(1);
 
     getmaxyx(stdscr, row, col);
@@ -110,7 +117,7 @@ void GameOfLife::displayGen() {
     for(int i = 0; i < row; i++) {
         for(int j = 0; j < col; j++) {
             if(currentGen.getState(i, j) == 1) {
-                attron(COLOR_PAIR(1));
+                attron(COLOR_PAIR(genNumber % 6 + 1));
                 mvprintw(i,j*2, "  ");
             }
         }
@@ -166,6 +173,7 @@ void GameOfLife::calcNextGen() {
 
 
     currentGen = nextGen;
+    genNumber++;
 
 }
 

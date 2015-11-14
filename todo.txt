@@ -6,3 +6,5 @@ pulsar
 
 better handling of arguments/defaults
 
+different color per generation
+

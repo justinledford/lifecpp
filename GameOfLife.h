@@ -24,4 +24,6 @@ class GameOfLife {
         
         Grid currentGen;
         Grid nextGen;
+
+        unsigned int genNumber;
 };
