@@ -10,15 +10,17 @@
 
 using namespace std;
 
-GameOfLife::GameOfLife(int s, string m)
+GameOfLife::GameOfLife(int s, string m, bool c)
 :speed(s),mode(m),currentGen(),nextGen()
 {
     initializeGui();
 
+    previousGen.initializeCoordinates(row, col);
     currentGen.initializeCoordinates(row, col);
     nextGen.initializeCoordinates(row, col);
 
     genNumber = 0;
+    colorChange = c;
 }
 
 void GameOfLife::start() {
@@ -34,8 +36,8 @@ void GameOfLife::start() {
         displayGen();
         refresh();
         usleep(speed * 1000);
-        eraseGen();
         calcNextGen();
+        eraseGen();
     }
            
     getch();
@@ -116,8 +118,12 @@ void GameOfLife::displayGen() {
     //mvprintw(0, 0, "%u", (unsigned)time(NULL));
     for(int i = 0; i < row; i++) {
         for(int j = 0; j < col; j++) {
-            if(currentGen.getState(i, j) == 1) {
-                attron(COLOR_PAIR(genNumber % 6 + 1));
+            if(currentGen.getState(i, j) == 1 && 
+                    previousGen.getState(i, j) == 0) {
+                if(colorChange)
+                    attron(COLOR_PAIR(genNumber % 6 + 1));
+                else
+                    attron(COLOR_PAIR(1));
                 mvprintw(i,j*2, "  ");
             }
         }
@@ -127,7 +133,7 @@ void GameOfLife::displayGen() {
 void GameOfLife::eraseGen() {
     for(int i = 0; i < row; i++) {
         for(int j = 0; j < col; j++) {
-            if(currentGen.getState(i, j) == 1) {
+            if(currentGen.getState(i, j) == 0) {
                 attroff(COLOR_PAIR(1));
                 mvprintw(i,j*2, "  ");
             }
@@ -172,6 +178,7 @@ void GameOfLife::calcNextGen() {
     }
 
 
+    previousGen = currentGen;
     currentGen = nextGen;
     genNumber++;
 

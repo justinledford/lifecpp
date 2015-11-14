@@ -5,7 +5,7 @@
 
 class GameOfLife {
     public:
-        GameOfLife(int=250, std::string="random");
+        GameOfLife(int=250, std::string="random", bool=false);
         void start();
     private:
         void initializeGui();
@@ -22,8 +22,11 @@ class GameOfLife {
         int row;
         int col;
         
+
+        Grid previousGen;
         Grid currentGen;
         Grid nextGen;
 
         unsigned int genNumber;
+        bool colorChange;
 };
