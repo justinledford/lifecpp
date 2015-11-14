@@ -49,12 +49,15 @@ void GameOfLife::initializeGui() {
 
     getmaxyx(stdscr, row, col);
 
+    col /= 2;
 
     // col needs to be odd and space at right end 
+    /*
     col--;
 
     if(col % 2 == 0)
         col--;
+        */
 }
 
 
@@ -62,7 +65,7 @@ void GameOfLife::initialRandom() {
     srand(time(NULL));
 
     for(int i = 0; i < row; i++) {
-        for(int j = 0; j < col; j += 2) {
+        for(int j = 0; j < col; j++) {
             currentGen.setState(i, j, rand() % 2);
         }
     }
@@ -75,24 +78,24 @@ void GameOfLife::initialGlider() {
     if((centerX % 2) == 1)
         centerX += 1;
 
-    //mvprintw(0,0, "%u %u", row, col);
+    mvprintw(0,0, "%u %u", row, col);
     //mvprintw(1,0, "%u %u", centerY, centerX);
 
     currentGen.setState(centerY - 1, centerX, 1);
     currentGen.setState(centerY + 1, centerX, 1);
-    currentGen.setState(centerY - 1, centerX - 2, 1);
-    currentGen.setState(centerY - 1, centerX + 2, 1);
-    currentGen.setState(centerY, centerX - 2, 1);
+    currentGen.setState(centerY - 1, centerX - 1, 1);
+    currentGen.setState(centerY - 1, centerX + 1, 1);
+    currentGen.setState(centerY, centerX - 1, 1);
 }
 
 
 void GameOfLife::displayGen() {
     //mvprintw(0, 0, "%u", (unsigned)time(NULL));
     for(int i = 0; i < row; i++) {
-        for(int j = 0; j < col; j += 2) {
+        for(int j = 0; j < col; j++) {
             if(currentGen.getState(i, j) == 1) {
                 attron(COLOR_PAIR(1));
-                mvprintw(i,j, "  ");
+                mvprintw(i,j*2, "  ");
             }
         }
     }
@@ -100,10 +103,10 @@ void GameOfLife::displayGen() {
 
 void GameOfLife::eraseGen() {
     for(int i = 0; i < row; i++) {
-        for(int j = 0; j < col; j += 2) {
+        for(int j = 0; j < col; j++) {
             if(currentGen.getState(i, j) == 1) {
                 attroff(COLOR_PAIR(1));
-                mvprintw(i,j, "  ");
+                mvprintw(i,j*2, "  ");
             }
         }
     }
@@ -111,16 +114,16 @@ void GameOfLife::eraseGen() {
 
 void GameOfLife::calcNextGen() {
     for(int i = 0; i < row; i++) {
-        for(int j = 0; j < col; j += 2) {
+        for(int j = 0; j < col; j++) {
             int liveNeighbors = 0;
 
-            liveNeighbors += currentGen.getState(i, j+2); //right
-            liveNeighbors += currentGen.getState(i, j-2); //left
-            liveNeighbors += currentGen.getState(i+1,j+2); 
+            liveNeighbors += currentGen.getState(i, j+1); //right
+            liveNeighbors += currentGen.getState(i, j-1); //left
+            liveNeighbors += currentGen.getState(i+1,j+1); 
             //bottom right
-            liveNeighbors += currentGen.getState(i-1,j+2); //top right
-            liveNeighbors += currentGen.getState(i+1, j-2); //bottom left
-            liveNeighbors += currentGen.getState(i-1, j-2); //top left
+            liveNeighbors += currentGen.getState(i-1,j+1); //top right
+            liveNeighbors += currentGen.getState(i+1, j-1); //bottom left
+            liveNeighbors += currentGen.getState(i-1, j-1); //top left
             liveNeighbors += currentGen.getState(i-1, j); //top
             liveNeighbors += currentGen.getState(i+1, j); //bottom
 
