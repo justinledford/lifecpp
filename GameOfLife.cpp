@@ -23,6 +23,8 @@ void GameOfLife::start() {
 
     if(mode == "glider")
         initialGlider();
+    else if(mode == "R")
+        initialRPentomino();
     else
         initialRandom();
 
@@ -78,7 +80,7 @@ void GameOfLife::initialGlider() {
     if((centerX % 2) == 1)
         centerX += 1;
 
-    mvprintw(0,0, "%u %u", row, col);
+    //mvprintw(0,0, "%u %u", row, col);
     //mvprintw(1,0, "%u %u", centerY, centerX);
 
     currentGen.setState(centerY - 1, centerX, 1);
@@ -86,6 +88,20 @@ void GameOfLife::initialGlider() {
     currentGen.setState(centerY - 1, centerX - 1, 1);
     currentGen.setState(centerY - 1, centerX + 1, 1);
     currentGen.setState(centerY, centerX - 1, 1);
+}
+
+void GameOfLife::initialRPentomino() {
+    int centerY = row / 2;
+    int centerX = col / 2;
+
+    if((centerX % 2) == 1)
+        centerX += 1;
+
+    currentGen.setState(centerY, centerX, 1);
+    currentGen.setState(centerY + 1, centerX, 1);
+    currentGen.setState(centerY - 1, centerX, 1);
+    currentGen.setState(centerY, centerX - 1, 1);
+    currentGen.setState(centerY - 1, centerX + 1, 1);
 }
 
 

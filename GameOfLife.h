@@ -11,6 +11,7 @@ class GameOfLife {
         void initializeGui();
         void initialRandom();
         void initialGlider();
+        void initialRPentomino();
         void displayGen();
         void eraseGen();
         void calcNextGen();

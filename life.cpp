@@ -10,15 +10,19 @@ using namespace std;
 int main(int argc, char **argv) {
     //Process options
     int gflag = 0;
+    int Rflag = 0;
     char *svalue;
     int opt;
     opterr = 0;
     int speed = 250;
 
-    while((opt = getopt(argc, argv, "gs:")) != -1) {
+    while((opt = getopt(argc, argv, "gRs:")) != -1) {
         switch(opt) {
             case 'g':
                 gflag = 1;
+                break;
+            case 'R':
+                Rflag = 1;
                 break;
             case 's':
                 {
@@ -39,8 +43,10 @@ int main(int argc, char **argv) {
     if(gflag) {
         GameOfLife game(speed, "glider");
         game.start();
-    }
-    else {
+    } else if(Rflag) {
+        GameOfLife game(speed, "R");
+        game.start();
+    } else {
         GameOfLife game(speed, "random");
         game.start();
     }
