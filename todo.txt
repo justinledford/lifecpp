@@ -7,3 +7,4 @@ pulsar
 better handling of arguments/defaults
 
 cells wrap around
+    -bug: only works with odd number of columns, half width block on sides

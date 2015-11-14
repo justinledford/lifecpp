@@ -11,23 +11,12 @@
 using namespace std;
 
 GameOfLife::GameOfLife(int s, string m)
-:speed(s),mode(m)
+:speed(s),mode(m),currentGen(),nextGen()
 {
     initializeGui();
 
-    //Initialize vectors
-    currentGen.resize(row);
-    for(int i = 0; i < row; ++i) {
-        currentGen[i].resize(col);
-        fill(currentGen[i].begin(), currentGen[i].end(), 0);
-    }
-
-    nextGen.resize(row);
-    for(int i = 0; i < row; ++i) {
-        nextGen[i].resize(col);
-        fill(nextGen[i].begin(), nextGen[i].end(), 0);
-    }
-
+    currentGen.initializeCoordinates(row, col);
+    nextGen.initializeCoordinates(row, col);
 }
 
 void GameOfLife::start() {
@@ -59,6 +48,13 @@ void GameOfLife::initializeGui() {
     //timeout(1);
 
     getmaxyx(stdscr, row, col);
+
+
+    // col needs to be odd and space at right end 
+    col--;
+
+    if(col % 2 == 0)
+        col--;
 }
 
 
@@ -67,7 +63,7 @@ void GameOfLife::initialRandom() {
 
     for(int i = 0; i < row; i++) {
         for(int j = 0; j < col; j += 2) {
-            currentGen[i][j] = rand() % 2; 
+            currentGen.setState(i, j, rand() % 2);
         }
     }
 }
@@ -82,11 +78,11 @@ void GameOfLife::initialGlider() {
     //mvprintw(0,0, "%u %u", row, col);
     //mvprintw(1,0, "%u %u", centerY, centerX);
 
-    currentGen[centerY - 1][centerX] = 1;
-    currentGen[centerY + 1][centerX] = 1;
-    currentGen[centerY - 1][centerX - 2] = 1;
-    currentGen[centerY - 1][centerX + 2] = 1;
-    currentGen[centerY][centerX - 2] = 1;
+    currentGen.setState(centerY - 1, centerX, 1);
+    currentGen.setState(centerY + 1, centerX, 1);
+    currentGen.setState(centerY - 1, centerX - 2, 1);
+    currentGen.setState(centerY - 1, centerX + 2, 1);
+    currentGen.setState(centerY, centerX - 2, 1);
 }
 
 
@@ -94,7 +90,7 @@ void GameOfLife::displayGen() {
     //mvprintw(0, 0, "%u", (unsigned)time(NULL));
     for(int i = 0; i < row; i++) {
         for(int j = 0; j < col; j += 2) {
-            if(currentGen[i][j] == 1) {
+            if(currentGen.getState(i, j) == 1) {
                 attron(COLOR_PAIR(1));
                 mvprintw(i,j, "  ");
             }
@@ -105,7 +101,7 @@ void GameOfLife::displayGen() {
 void GameOfLife::eraseGen() {
     for(int i = 0; i < row; i++) {
         for(int j = 0; j < col; j += 2) {
-            if(currentGen[i][j] == 1) {
+            if(currentGen.getState(i, j) == 1) {
                 attroff(COLOR_PAIR(1));
                 mvprintw(i,j, "  ");
             }
@@ -117,48 +113,40 @@ void GameOfLife::calcNextGen() {
     for(int i = 0; i < row; i++) {
         for(int j = 0; j < col; j += 2) {
             int liveNeighbors = 0;
-            try {
-                liveNeighbors += currentGen[i].at(j+2); //right
-            } catch(out_of_range &e) {}
-            try {
-                liveNeighbors += currentGen[i].at(j-2); //left
-            } catch(out_of_range &e) {}
-            try {
-                liveNeighbors += currentGen.at(i+1).at(j+2); //bottom right
-            } catch(out_of_range &e) {}
-            try {
-                liveNeighbors += currentGen.at(i-1).at(j+2); //top right
-            } catch(out_of_range &e) {}
-            try {
-                liveNeighbors += currentGen.at(i+1).at(j-2); //bottom left
-            } catch(out_of_range &e) {}
-            try {
-                liveNeighbors += currentGen.at(i-1).at(j-2); //top left
-            } catch(out_of_range &e) {}
-            try {
-                liveNeighbors += currentGen.at(i-1).at(j); //top
-            } catch(out_of_range &e) {}
-            try {
-                liveNeighbors += currentGen.at(i+1).at(j); //bottom
-            } catch(out_of_range &e) {}
+
+            liveNeighbors += currentGen.getState(i, j+2); //right
+            liveNeighbors += currentGen.getState(i, j-2); //left
+            liveNeighbors += currentGen.getState(i+1,j+2); 
+            //bottom right
+            liveNeighbors += currentGen.getState(i-1,j+2); //top right
+            liveNeighbors += currentGen.getState(i+1, j-2); //bottom left
+            liveNeighbors += currentGen.getState(i-1, j-2); //top left
+            liveNeighbors += currentGen.getState(i-1, j); //top
+            liveNeighbors += currentGen.getState(i+1, j); //bottom
 
 
-            if(currentGen[i][j] == 1) {
+
+
+
+            if(currentGen.getState(i, j) == 1) {
                 if(liveNeighbors < 2) {
-                    nextGen[i][j] = 0;
+                    nextGen.setState(i, j, 0);
                 } else if (liveNeighbors >=2 && liveNeighbors <= 3) {
-                    nextGen[i][j] = 1;
+                    nextGen.setState(i, j, 1);
                 } else {
-                    nextGen[i][j] = 0;
+                    nextGen.setState(i, j, 0);
                 }
-            } else if(currentGen[i][j] == 0) {
+            } else if(currentGen.getState(i, j) == 0) {
                 if(liveNeighbors == 3) {
-                    nextGen[i][j] = 1;
+                    nextGen.setState(i, j, 1);
                 }
             }
         }
+
     }
 
+
     currentGen = nextGen;
+
 }
 

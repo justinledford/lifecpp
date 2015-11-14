@@ -1,6 +1,8 @@
 #include <vector>
 #include <string>
 
+#include "Grid.h"
+
 class GameOfLife {
     public:
         GameOfLife(int=250, std::string="random");
@@ -19,8 +21,6 @@ class GameOfLife {
         int row;
         int col;
         
-        std::vector<std::vector<int> > currentGen;
-        std::vector<std::vector<int> > nextGen;
-
-
+        Grid currentGen;
+        Grid nextGen;
 };
