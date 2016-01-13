@@ -37,7 +37,10 @@ int main(int argc, char **argv) {
                 }
             case '?':
                 cout << "Random Game of life\nUsage:\n\t" 
-                    "-g\tGlider mode\n\t-s\tSpeed in ms\n";
+                    "-g\tGlider\n\t"
+                    "-R\tR-pentomino\n\t"
+                    "-s\tSpeed in ms\n\t"
+                    "-c\tChange color for each generation\n";
                 return 0;
             default:
                 break;

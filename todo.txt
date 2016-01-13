@@ -5,3 +5,4 @@ glider gun
 pulsar
 
 better handling of arguments/defaults
+    -exclusive starting conditions
