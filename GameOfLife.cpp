@@ -1,11 +1,9 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <time.h>
-
-#include <vector>
 #include <iostream>
 #include <string>
-
+#include <vector>
 #include "GameOfLife.h"
 
 using namespace std;
@@ -24,7 +22,6 @@ GameOfLife::GameOfLife(int s, string m, bool c)
 }
 
 void GameOfLife::start() {
-
     if(mode == "glider")
         initialGlider();
     else if(mode == "R")
@@ -45,7 +42,6 @@ void GameOfLife::start() {
 }
 
 void GameOfLife::initializeGui() {
-
     initscr();
     noecho();
     curs_set(0);
@@ -56,21 +52,11 @@ void GameOfLife::initializeGui() {
     init_pair(4, COLOR_BLACK, COLOR_CYAN);
     init_pair(5, COLOR_BLACK, COLOR_YELLOW);
     init_pair(6, COLOR_BLACK, COLOR_MAGENTA);
-    //timeout(1);
 
     getmaxyx(stdscr, row, col);
 
     col /= 2;
-
-    // col needs to be odd and space at right end 
-    /*
-    col--;
-
-    if(col % 2 == 0)
-        col--;
-        */
 }
-
 
 void GameOfLife::initialRandom() {
     srand(time(NULL));
@@ -88,9 +74,6 @@ void GameOfLife::initialGlider() {
 
     if((centerX % 2) == 1)
         centerX += 1;
-
-    //mvprintw(0,0, "%u %u", row, col);
-    //mvprintw(1,0, "%u %u", centerY, centerX);
 
     currentGen.setState(centerY - 1, centerX, 1);
     currentGen.setState(centerY + 1, centerX, 1);
@@ -115,7 +98,6 @@ void GameOfLife::initialRPentomino() {
 
 
 void GameOfLife::displayGen() {
-    //mvprintw(0, 0, "%u", (unsigned)time(NULL));
     for(int i = 0; i < row; i++) {
         for(int j = 0; j < col; j++) {
             if(currentGen.getState(i, j) == 1 && 
@@ -148,17 +130,12 @@ void GameOfLife::calcNextGen() {
 
             liveNeighbors += currentGen.getState(i, j+1); //right
             liveNeighbors += currentGen.getState(i, j-1); //left
-            liveNeighbors += currentGen.getState(i+1,j+1); 
-            //bottom right
+            liveNeighbors += currentGen.getState(i+1,j+1); //bottom right
             liveNeighbors += currentGen.getState(i-1,j+1); //top right
             liveNeighbors += currentGen.getState(i+1, j-1); //bottom left
             liveNeighbors += currentGen.getState(i-1, j-1); //top left
             liveNeighbors += currentGen.getState(i-1, j); //top
             liveNeighbors += currentGen.getState(i+1, j); //bottom
-
-
-
-
 
             if(currentGen.getState(i, j) == 1) {
                 if(liveNeighbors < 2) {
@@ -177,10 +154,8 @@ void GameOfLife::calcNextGen() {
 
     }
 
-
     previousGen = currentGen;
     currentGen = nextGen;
     genNumber++;
-
 }
 

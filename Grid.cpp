@@ -19,7 +19,6 @@ void Grid::setState(int row, int col, int n) {
 }
 
 int Grid::getState(int row, int col) const {
-
     if(row < 0) {
         if(col < 0)
             return coordinates[max_row][max_col];
@@ -43,4 +42,3 @@ int Grid::getState(int row, int col) const {
             return coordinates[row][col];
     }
 }
-
