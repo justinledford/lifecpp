@@ -15,13 +15,13 @@ class GameOfLife {
         void displayGen();
         void eraseGen();
         void calcNextGen();
+        int countLiveNeighbors(int, int);
 
         int speed;
         std::string mode;
 
         int row;
         int col;
-        
 
         Grid previousGen;
         Grid currentGen;

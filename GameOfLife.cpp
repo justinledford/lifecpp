@@ -127,16 +127,7 @@ void GameOfLife::eraseGen() {
 void GameOfLife::calcNextGen() {
     for(int i = 0; i < row; i++) {
         for(int j = 0; j < col; j++) {
-            int liveNeighbors = 0;
-
-            liveNeighbors += currentGen.getState(i, j+1); //right
-            liveNeighbors += currentGen.getState(i, j-1); //left
-            liveNeighbors += currentGen.getState(i+1,j+1); //bottom right
-            liveNeighbors += currentGen.getState(i-1,j+1); //top right
-            liveNeighbors += currentGen.getState(i+1, j-1); //bottom left
-            liveNeighbors += currentGen.getState(i-1, j-1); //top left
-            liveNeighbors += currentGen.getState(i-1, j); //top
-            liveNeighbors += currentGen.getState(i+1, j); //bottom
+            int liveNeighbors = countLiveNeighbors(i, j);
 
             if(currentGen.getState(i, j) == 1) {
                 if(liveNeighbors < 2) {
@@ -160,3 +151,15 @@ void GameOfLife::calcNextGen() {
     genNumber++;
 }
 
+int GameOfLife::countLiveNeighbors(int row, int col) {
+    int liveNeighbors = 0;
+
+    for(int i = -1; i < 2; i++) {
+        for(int j = -1; j < 2; j++) {
+            if (!(i == j && i == 0))
+                liveNeighbors += currentGen.getState(row+i, col+j);
+        }
+    }
+
+    return liveNeighbors;
+}
