@@ -1,6 +1,6 @@
 #include <ncurses.h>
 #include <unistd.h>
-#include <time.h>
+#include <ctime>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,8 +9,8 @@
 using namespace std;
 
 GameOfLife::GameOfLife(int s, string m, bool c)
-:speed(s),mode(m),currentGen(),nextGen()
-{
+:speed(s),mode(m),currentGen(),nextGen() {
+
     initializeGui();
 
     previousGen.initializeCoordinates(row, col);
@@ -36,7 +36,7 @@ void GameOfLife::start() {
         calcNextGen();
         eraseGen();
     }
-           
+
     getch();
     endwin();
 }
