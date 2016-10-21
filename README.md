@@ -10,3 +10,6 @@ Usage:
      -R	R-pentomino  
 	 -s	Speed in ms  
 	 -c	Change color for each generation  
+
+
+![Alt Text](https://github.com/justinledford/lifecpp/raw/master/preview/glider.gif)
